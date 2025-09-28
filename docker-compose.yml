@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  mcp-visual-design-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8004"
+    environment:
+      - ENVIRONMENT=development
+      - LOG_LEVEL=INFO
+      - MCP_VISUAL_SERVICE_HOST=0.0.0.0
+      - MCP_VISUAL_SERVICE_PORT=8004
+      # Provider API keys - set these in your environment
+      - FAL_API_KEY=${FAL_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      # PayloadCMS configuration
+      - PAYLOADCMS_API_URL=${PAYLOADCMS_API_URL:-http://host.docker.internal:3000/api}
+      - PAYLOADCMS_API_KEY=${PAYLOADCMS_API_KEY}
+      # Optional Redis for background tasks
+      - REDIS_URL=${REDIS_URL}
+    volumes:
+      - ./src:/app/src:ro
+      - ./logs:/app/logs
+    networks:
+      - movie-platform
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - redis
+    
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - movie-platform
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  movie-platform:
+    external: true
+    name: movie-platform
+
+volumes:
+  redis_data:
