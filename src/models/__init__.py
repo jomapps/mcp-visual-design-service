@@ -3,9 +3,11 @@
 from .visual import (
     ConceptGenerationRequest,
     ConceptGenerationResponse,
+    GenerationStatus,
     Scene,
     StoryboardGenerationRequest,
     StoryboardGenerationResponse,
+    VisualType,
     UpscaleRequest,
     UpscaleResponse,
     VisualAsset,
@@ -18,6 +20,8 @@ __all__ = [
     "StoryboardGenerationResponse",
     "ConceptGenerationRequest",
     "ConceptGenerationResponse",
+    "GenerationStatus",
+    "VisualType",
     "UpscaleRequest",
     "UpscaleResponse",
 ]

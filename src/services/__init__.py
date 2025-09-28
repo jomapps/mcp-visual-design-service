@@ -1,11 +1,7 @@
-"""Services layer for the MCP Visual Design Service."""
+"""Services package marker without eager imports.
 
-from .provider_factory import ProviderFactory
-from .visual_service import VisualService
-from .asset_service import AssetService
+Avoid importing heavy submodules at package import time to keep tests light.
+Import individual modules directly where needed.
+"""
 
-__all__ = [
-    "ProviderFactory",
-    "VisualService", 
-    "AssetService",
-]
+__all__: list[str] = []

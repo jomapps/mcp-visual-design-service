@@ -14,7 +14,9 @@ from ..models import (
     UpscaleRequest,
     UpscaleResponse,
 )
-from ..services import AssetService, ProviderFactory, VisualService
+from ..services.asset_service import AssetService
+from ..services.provider_factory import ProviderFactory
+from ..services.visual_service import VisualService
 
 logger = logging.getLogger(__name__)
 
