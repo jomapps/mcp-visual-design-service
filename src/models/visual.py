@@ -125,3 +125,54 @@ class UpscaleResponse(BaseModel):
     progress: float = Field(default=0.0, description="Upscaling progress (0.0-1.0)")
     error_message: Optional[str] = Field(None, description="Error message if failed")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
+
+
+# --- Image Generation (Storyboard Frames) Models ---
+from typing import Optional, List, Dict, Any
+from pydantic import BaseModel, Field
+
+
+class CharacterProfile(BaseModel):
+    name: str
+    visual_signature: str
+
+
+class StoryboardFrameInput(BaseModel):
+    frame_id: str
+    description: str
+    camera_notes: Optional[str] = None
+    lighting_mood: Optional[str] = None
+    prompt_seed: Optional[int] = None
+
+
+class RenderSettings(BaseModel):
+    provider: str = Field(default="fal_ai")
+    model: str = Field(default="fal-ai/flux-pro")
+    aspect_ratio: str = Field(default="16:9")
+    guidance_scale: float = Field(default=4.5)
+    steps: int = Field(default=24)
+    seed: Optional[int] = None
+
+
+class RenderedFrame(BaseModel):
+    frame_id: str
+    image_url: str
+    negative_prompts: Optional[List[str]] = None
+    provider_metadata: Dict[str, Any] = {}
+    quality_score: Optional[float] = None
+
+
+class FailedFrame(BaseModel):
+    frame_id: str
+    error: str
+
+
+class RenderStoryboardFramesRequest(BaseModel):
+    storyboard_frames: List[StoryboardFrameInput]
+    character_profiles: List[CharacterProfile] = []
+    render_settings: RenderSettings = RenderSettings()
+
+
+class RenderStoryboardFramesResponse(BaseModel):
+    generated_frames: List[RenderedFrame] = []
+    failed_frames: List[FailedFrame] = []

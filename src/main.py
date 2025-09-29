@@ -14,6 +14,8 @@ from .routers.spec_requests import router as spec_router
 from .routers.styles_stub import router as styles_stub_router
 from .services.provider_factory import ProviderFactory
 
+from .routers.visual import router as visual_router
+
 # Configure logging
 logging.basicConfig(
     level=getattr(logging, settings.log_level.upper()),
@@ -69,6 +71,8 @@ app.add_middleware(
 )
 
 # Include routers
+app.include_router(visual_router, prefix="/api/v1")
+
 app.include_router(spec_router, prefix="")
 app.include_router(styles_stub_router, prefix="/api/v1")
 
